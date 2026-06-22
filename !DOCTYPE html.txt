@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Gastos Rápidos</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-top: 0;
+        }
+        .total-box {
+            background-color: #2ecc71;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        input, button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .expense-list {
+            list-style: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        .expense-name { color: #555; }
+        .expense-amount { font-weight: bold; color: #e74c3c; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Mis Gastos Rápidos</h2>
+    <div class="total-box">Total: $<span id="total-amount">0.00</span></div>
+    
+    <input type="text" id="expense-name" placeholder="¿En qué gastaste? (ej. Café)">
+    <input type="number" id="expense-amount" placeholder="¿Cuánto costó? (ej. 4.50)" step="0.01">
+    <button onclick="addExpense()">Agregar Gasto</button>
+
+    <ul class="expense-list" id="expense-list">
+        </ul>
+</div>
+
+<script>
+    let total = 0;
+
+    function addExpense() {
+        const nameInput = document.getElementById('expense-name');
+        const amountInput = document.getElementById('expense-amount');
+        
+        const name = nameInput.value.trim();
+        const amount = parseFloat(amountInput.value);
+
+        if (name === '' || isNaN(amount) || amount <= 0) {
+            alert('Por favor, ingresa un nombre válido y un monto mayor a 0.');
+            return;
+        }
+
+        // Actualizar Total
+        total += amount;
+        document.getElementById('total-amount').textContent = total.toFixed(2);
+
+        // Añadir a la lista visual
+        const list = document.getElementById('expense-list');
+        const listItem = document.createElement('li');
+        listItem.className = 'expense-item';
+        listItem.innerHTML = `
+            <span class="expense-name">${name}</span>
+            <span class="expense-amount">-$${amount.toFixed(2)}</span>
+        `;
+        
+        // Insertar al principio de la lista
+        list.insertBefore(listItem, list.firstChild);
+
+        // Limpiar inputs
+        nameInput.value = '';
+        amountInput.value = '';
+    }
+</script>
+
+</body>
+</html>
